@@ -16,9 +16,9 @@ in the source distribution for its full text.
 #include "Meter.h"
 #include "CPUMeter.h"
 #include "MemoryMeter.h"
-#include "KernelVersion.h"
 #include "SwapMeter.h"
 #include "TasksMeter.h"
+#include "KernelVersion.h"
 #include "LoadAverageMeter.h"
 #include "UptimeMeter.h"
 #include "ClockMeter.h"
@@ -240,20 +240,4 @@ char* Platform_getProcessEnv(pid_t pid) {
       }
    }
    return env;
-}
-
-void Platform_getKernelVersion(char *KernelVersion) {
-    char unix[32] = {0,};
-    char hostname[32] = {0,};
-    char version[32] = {0,};
-    char *kernelversion;
-    FILE* fd = fopen(PROCDIR "/version", "r");
-    if (fd) {
-        int n = fscanf(fd, "%s %s %s", unix, hostname, version);
-        (void) n;
-        kernelversion = String_cat(unix, " ");
-        kernelversion = String_cat(kernelversion, version);
-        strncpy(KernelVersion, kernelversion, strlen(kernelversion));
-        fclose(fd);
-    }
 }

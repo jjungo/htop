@@ -13,6 +13,7 @@ in the source distribution for its full text.
 #include "SwapMeter.h"
 #include "TasksMeter.h"
 #include "LoadAverageMeter.h"
+#include "KernelVersion.h"
 #include "UptimeMeter.h"
 #include "ClockMeter.h"
 #include "HostnameMeter.h"
@@ -160,6 +161,7 @@ MeterClass* Platform_meterTypes[] = {
    &LeftCPUs2Meter_class,
    &RightCPUs2Meter_class,
    &BlankMeter_class,
+   &KernelVersionMeter_class,
    NULL
 };
 

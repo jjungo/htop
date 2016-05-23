@@ -45,6 +45,4 @@ void Platform_setSwapValues(Meter* this);
 
 char* Platform_getProcessEnv(pid_t pid);
 
-void Platform_getKernelVersion(char *KernelVersion);
-
 #endif

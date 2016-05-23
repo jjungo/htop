@@ -6,14 +6,16 @@ in the source distribution for its full text.
 */
 
 #include "KernelVersion.h"
-#include "Platform.h"
 #include "CRT.h"
+#include "KernelVersion.h"
 
+#include <sys/utsname.h>
 #include <string.h>
 
 /*{
 #include "Meter.h"
 }*/
+
 
 int KernelVersionMeter_attributes[] = {
    KERNELVERSION
@@ -21,10 +23,16 @@ int KernelVersionMeter_attributes[] = {
 
 static void KernelVersionMeter_updateValues(Meter* this, char* buffer, int len) {
     (void) this;
-    char *kernversion = xMalloc(256);
-    Platform_getKernelVersion(kernversion);
-    memcpy(buffer, kernversion, len);
-    free(kernversion);
+    if ((buffer != NULL) && (len > 0)) {
+        struct utsname* datas = xMalloc(sizeof(struct utsname));
+        if (uname(datas) == -1) {
+            buffer = NULL;
+            free(datas);
+            return;
+        }
+        snprintf(buffer, len, "%s %s", datas->sysname, datas->release);
+        free(datas);
+    }
 }
 
 MeterClass KernelVersionMeter_class = {
@@ -34,7 +42,7 @@ MeterClass KernelVersionMeter_class = {
    },
    .updateValues = KernelVersionMeter_updateValues,
    .defaultMode = TEXT_METERMODE,
-   .total = 100.0,
+   .total = 1.0,
    .attributes = KernelVersionMeter_attributes,
    .name = "Kernel",
    .uiName = "Kernel version",
